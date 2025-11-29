@@ -1,0 +1,42 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'remediator'
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 3m
+
+receivers:
+  - name: 'remediator'
+    # Config 1: Send Webhook to Python script for auto-remediation
+    webhook_configs:
+      - url: 'http://192.168.116.136:5000/alert'
+
+    # Config 2: Send notification message to Discord
+    discord_configs:
+      - webhook_url: 'PASTE_YOUR_DISCORD_WEBHOOK_URL_HERE'
+        title: >-
+          {{ if eq .Status "firing" }}
+            🚨 Alert: {{ .CommonAnnotations.summary }}
+          {{ else }}
+            {{ if eq .CommonLabels.alertname "WebDown" }}
+              ✅ Solved: Web Service Recovered
+            {{ else if eq .CommonLabels.alertname "HighCPU" }}
+              ✅ Solved: CPU Usage Normal
+            {{ else }}
+              ✅ Solved: {{ .CommonAnnotations.summary }}
+            {{ end }}
+          {{ end }}
+        message: >-
+          {{ if eq .Status "firing" }}
+            Details: {{ .CommonAnnotations.description }}
+          {{ else }}
+            {{ if eq .CommonLabels.alertname "WebDown" }}
+              The web service has been automatically restarted and is back online.
+            {{ else if eq .CommonLabels.alertname "HighCPU" }}
+              CPU usage has returned to safe levels (below 85%). No action was needed.
+            {{ else }}
+              The issue has been resolved successfully.
+            {{ end }}
+          {{ end }}

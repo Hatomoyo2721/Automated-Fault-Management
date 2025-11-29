@@ -1,0 +1,23 @@
+# Alert rules
+groups:
+  - name: demo.rules
+    rules:
+      # Rule 1: WebDown
+      - alert: WebDown
+        expr: probe_success == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Website is down ({{ $labels.instance }})"
+          description: "The web service at {{ $labels.instance }} has probe_success == 0 for >30s."
+
+      # Rule 2: HighCPU
+      - alert: HighCPU
+        expr: (1 - avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[2m]))) * 100 > 85
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected on {{ $labels.instance }}"
+          description: "CPU usage has exceeded 85% for over 30s."
