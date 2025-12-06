@@ -19,5 +19,5 @@ Check out the full implementation and testing scenarios in the playlist below:
 **[📺 Watch Demo Playlist on YouTube](https://www.youtube.com/playlist?list=PLiXwXacd4F0gUcHUCHFB3eoSB9P1efQny)**
 
 ## 🧪 Scenarios Tested
-1.  **Web Service Failure:** Auto-detect `nginx` down -> Trigger Alert -> Auto-restart container -> Resolve Alert.
-2.  **High CPU Usage:** Detect load > 85% -> Trigger Warning Alert to Discord.
+1.  **Web Service Failure:** Auto-detect `nginx` down ➜ Trigger Alert ➜ Auto-restart container ➜ Resolve Alert.
+2.  **High CPU Usage:** Detect load > 85% ➜ Trigger Warning Alert to Discord.
